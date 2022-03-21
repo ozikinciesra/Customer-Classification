@@ -16,10 +16,9 @@ args = parser.parse_args()
 prediction_file_path = args.prediction_file
 df_predict = pd.read_csv(prediction_file_path, sep=",")
 
-features = ["total_count_computer_phone_tablet", "total_count", "tablet_count", "smarthome_count",
-            "speed_tier_bucket", "interference_5G_bucket", "WEM_bucket", "bad_quality_traffic_tx",
-            "bad_quality_traffic_rx", "bad_quality_speed_tier", "bad_quality_interference_5G",
-            "bad_quality_WEM"]
+features = ["total_count", "bad_quality_speed_tier", "total_count_gaming_tv_printer", "tablet_count",
+            "smarthome_count", "total_count_computer_phone_tablet", "bad_quality_WEM", "wearables_count",
+            "gaming_count", "bad_quality_interference_5G"]
 df_predict = ClassifierModel().create_new_features(df_predict)
 model_path = "../model/trained_data.pkl"
 xgbr_model = ClassifierModel().read_pickle(model_path)
