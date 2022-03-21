@@ -58,7 +58,7 @@ class ClassifierModel:
 
     def train_model(self, train_set, train_labels):
         print("Info: Model training started with: " + str(train_set.shape[0]) + " sample")
-        model = xgb.XGBClassifier(learning_rate=0.01, min_child_weight=8, eta=0.2)
+        model = xgb.XGBClassifier(learning_rate=0.02, min_child_weight=11, eta=0.2)
         print("Info: Model Parameters: " + str(model.get_params()))
         model.fit(train_set, train_labels)
         pickle_path = "../model/trained_data.pkl"
@@ -132,6 +132,7 @@ class ClassifierModel:
         df["total_count"] = df["computer_count"] + df["tablet_count"] + df["mobile_phones_count"] + df["other_count"] + \
                             df["smarthome_count"] + df["wearables_count"] + df["gaming_count"] + df[
                                 "tv_&_audio_count"] + df["printer_&_scanners_count"]
+        df["total_count_gaming_tv_printer"] = df["gaming_count"] + df["tv_&_audio_count"] + df["printer_&_scanners_count"]
 
         df.loc[df["traffic_tx_bucket"] <= 2, "bad_quality_traffic_tx"] = 1
         df.loc[df["traffic_rx_bucket"] <= 3, "bad_quality_traffic_rx"] = 1
@@ -165,9 +166,9 @@ if __name__ == "__main__":
         df = classifier_model.create_new_features(df)
 
         # selected by using Initial Analyses.ipynb jupyter notebook script
-        selected_features = ["total_count_computer_phone_tablet", "total_count", "tablet_count", "smarthome_count",
-                             "total_count_gaming_tv_printer", "speed_tier_bucket", "bad_quality_speed_tier",
-                             "bad_quality_interference_5G", "bad_quality_WEM"]
+        selected_features = ["total_count", "bad_quality_speed_tier", "total_count_gaming_tv_printer", "tablet_count",
+                             "smarthome_count", "total_count_computer_phone_tablet", "bad_quality_WEM", "wearables_count",
+                             "gaming_count", "bad_quality_interference_5G"]
 
         train_df, test_df = classifier_model.run_model(df, features=selected_features)
 
